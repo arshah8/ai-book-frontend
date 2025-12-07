@@ -1,10 +1,12 @@
-import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
 import { pgTable, text, timestamp, varchar, pgEnum } from 'drizzle-orm/pg-core';
 
 // Database connection
 const sql = neon(process.env.DATABASE_URL!);
-export const db = drizzle(sql);
+// Type assertion to fix compatibility between neon and drizzle types
+// This is a known issue with type compatibility between @neondatabase/serverless and drizzle-orm
+export const db = drizzle(sql as any);
 
 // Enums
 export const experienceLevelEnum = pgEnum('experience_level', ['beginner', 'intermediate', 'advanced']);
