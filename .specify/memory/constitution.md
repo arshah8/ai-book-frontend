@@ -1,55 +1,46 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Physical AI Frontend Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Documentation-First UI
+Every page should feel like professional technical documentation. Typography, spacing, and navigation patterns should prioritize readability and clarity over flashy animations. The UI should get out of the way and let the content shine.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Mobile-First Responsive Design
+All components must work seamlessly on mobile devices. Sidebars collapse, buttons remain accessible while scrolling, and no horizontal scrolling should occur. Mobile users are first-class citizens.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Light Theme Default
+The application defaults to light theme for better accessibility and professional appearance. Dark theme is available but not forced. Theme switching must be instant and preserve user preference.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. RAG-Integrated Learning
+The chatbot is not an afterthought—it's a core learning tool. Selected text from the documentation should seamlessly flow into chat context. The assistant must answer questions using the actual textbook content via RAG.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Docusaurus Content Integration
+The book content lives in `book/docs/` as markdown. The frontend must dynamically load and render this content without hardcoding. When the book updates, the frontend should reflect those changes automatically.
 
-### [PRINCIPLE_6_NAME]
+### VI. Progressive Enhancement
+Core functionality (reading the book, navigation) works without JavaScript. Enhanced features (chatbot, theme switching) gracefully degrade if unavailable.
 
+## Technology Stack
 
-[PRINCIPLE__DESCRIPTION]
+**Framework**: Next.js 15+ (App Router)  
+**Styling**: Tailwind CSS with custom documentation typography  
+**Markdown**: react-markdown with remarkGfm, rehypeHighlight  
+**Theming**: next-themes with class-based dark mode  
+**Content Source**: Docusaurus markdown files in `book/docs/`
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Development Workflow
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- All new features must be documented in `specs/` using Specify templates
+- Mobile responsiveness must be tested on actual devices or browser dev tools
+- Theme changes must be verified in both light and dark modes
+- Chatbot integration must be tested with actual backend RAG responses
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution guides all frontend development decisions. When in doubt, prioritize:
+1. User experience (readability, navigation, accessibility)
+2. Content accuracy (RAG integration, markdown rendering)
+3. Performance (fast page loads, smooth transitions)
+4. Maintainability (clear code structure, reusable components)
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-01-XX | **Last Amended**: 2025-01-XX
