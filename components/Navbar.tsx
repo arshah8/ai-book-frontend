@@ -11,12 +11,46 @@ export default function Navbar() {
   const [user, setUser] = useState<any>(null);
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
+  // Function to update auth state
+  const updateAuthState = () => {
     if (isAuthenticated()) {
       setUser(getUser());
+    } else {
+      setUser(null);
     }
+  };
+
+  // Mount-only: set up listeners and initial auth state
+  useEffect(() => {
+    setMounted(true);
+    updateAuthState();
+
+    // Listen for storage changes (when user signs in/out in another tab)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'auth_token' || e.key === 'user') {
+        updateAuthState();
+      }
+    };
+
+    // Listen for custom events (for same-tab updates after login/logout)
+    const handleCustomStorageChange = () => {
+      updateAuthState();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('auth-state-changed', handleCustomStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('auth-state-changed', handleCustomStorageChange);
+    };
   }, []);
+
+  // Re-check auth state when route changes (e.g. after signin redirect)
+  useEffect(() => {
+    if (!mounted) return;
+    updateAuthState();
+  }, [pathname, mounted]);
 
   const isActive = (path: string) => pathname === path;
 
@@ -74,7 +108,10 @@ export default function Navbar() {
                   {user.name || user.email}
                 </span>
                 <button
-                  onClick={signOut}
+                  onClick={() => {
+                    signOut();
+                    setUser(null);
+                  }}
                   className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
                 >
                   Sign Out

@@ -37,6 +37,9 @@ export default function SigninPage() {
       localStorage.setItem('auth_token', data.access_token);
       localStorage.setItem('user', JSON.stringify(data.user));
       
+      // Dispatch custom event to notify Navbar of auth state change
+      window.dispatchEvent(new Event('auth-state-changed'));
+      
       // Redirect to home
       router.push('/');
     } catch (err: any) {

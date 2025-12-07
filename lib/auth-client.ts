@@ -26,6 +26,8 @@ export function signOut(): void {
   if (typeof window === 'undefined') return;
   localStorage.removeItem('auth_token');
   localStorage.removeItem('user');
+  // Dispatch event before redirect (though redirect will reload page anyway)
+  window.dispatchEvent(new Event('auth-state-changed'));
   window.location.href = '/signin';
 }
 

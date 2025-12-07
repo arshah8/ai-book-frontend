@@ -39,12 +39,9 @@ export default function SignupPage() {
 
       const data = await response.json();
       
-      // Store token in localStorage
-      localStorage.setItem('auth_token', data.access_token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      
-      // Redirect to home
-      router.push('/');
+      // Account created successfully - redirect to signin page
+      // User needs to sign in with their credentials
+      router.push('/signin');
     } catch (err: any) {
       setError(err.message || 'Signup failed. Please try again.');
     } finally {
