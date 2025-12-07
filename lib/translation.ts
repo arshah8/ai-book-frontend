@@ -1,7 +1,8 @@
-import { translateText as geminiTranslate } from "./gemini";
 import { db, translations } from "./database";
 import { eq, and } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
+
+const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export async function translateContent(
   text: string,
@@ -28,9 +29,22 @@ export async function translateContent(
     console.error("Error checking translation cache:", error);
   }
 
-  // Translate using Gemini
+  // Translate using backend API
   try {
-    const translated = await geminiTranslate(text, language);
+    const response = await fetch(`${BACKEND_URL}/api/translate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text, language: language || 'ur', module }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Translation API request failed');
+    }
+
+    const data = await response.json();
+    const translated = data.translated_text || data.text || text;
 
     // Cache the translation
     try {
