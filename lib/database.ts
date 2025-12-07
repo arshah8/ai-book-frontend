@@ -2,11 +2,30 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
 import { pgTable, text, timestamp, varchar, pgEnum } from 'drizzle-orm/pg-core';
 
-// Database connection
-const sql = neon(process.env.DATABASE_URL!);
-// Type assertion to fix compatibility between neon and drizzle types
-// This is a known issue with type compatibility between @neondatabase/serverless and drizzle-orm
-export const db = drizzle(sql as any);
+// Database connection - lazy initialization to avoid build-time errors
+// During Vercel build, DATABASE_URL is not available, so we defer initialization
+let _db: ReturnType<typeof drizzle> | null = null;
+
+function initDb() {
+  if (!_db) {
+    const databaseUrl = process.env.DATABASE_URL;
+    if (!databaseUrl || databaseUrl === '') {
+      throw new Error('DATABASE_URL environment variable is required. Database operations should go through the backend API.');
+    }
+    const sql = neon(databaseUrl);
+    // Type assertion to fix compatibility between neon and drizzle types
+    _db = drizzle(sql as any);
+  }
+  return _db;
+}
+
+// Export db with getter that initializes on first access
+// This allows the module to load during build without DATABASE_URL
+export const db = new Proxy({} as ReturnType<typeof drizzle>, {
+  get(_target, prop) {
+    return initDb()[prop as keyof ReturnType<typeof drizzle>];
+  }
+});
 
 // Enums
 export const experienceLevelEnum = pgEnum('experience_level', ['beginner', 'intermediate', 'advanced']);
