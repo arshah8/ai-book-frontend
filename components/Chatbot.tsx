@@ -25,10 +25,11 @@ export default function Chatbot() {
 
     const handleSelection = () => {
       const selection = window.getSelection();
+      // Capture non-empty selections, but don't clear immediately when
+      // the user clicks elsewhere or starts typing. This keeps the
+      // selected context visible while they compose a question.
       if (selection && selection.toString().trim()) {
         setSelectedText(selection.toString().trim());
-      } else {
-        setSelectedText('');
       }
     };
 
@@ -118,7 +119,10 @@ export default function Chatbot() {
           <div className="bg-indigo-600 text-white p-4 rounded-t-lg flex justify-between items-center">
             <h3 className="font-semibold">AI Assistant</h3>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                setSelectedText('');
+              }}
               className="text-white hover:text-gray-200"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
