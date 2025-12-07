@@ -1,106 +1,67 @@
 import Link from "next/link";
 import Chatbot from "@/components/Chatbot";
+import DocsLayout from '@/components/DocsLayout';
+import { getModuleFiles } from '@/lib/markdown-loader';
+import MarkdownContent from '@/components/MarkdownContent';
+import { loadMarkdownContent } from '@/lib/markdown-loader';
 
-export default function Module4Page() {
+export default async function Module4Page() {
+  // Get all sections from Docusaurus
+  const sections = await getModuleFiles('module4');
+  
+  // Load introduction content
+  const introContent = await loadMarkdownContent('module4/introduction.md');
+  
+  // Map section names to display names
+  const sectionMap: Record<string, string> = {
+    'introduction': 'Introduction',
+    'voice-to-action': 'Voice-to-Action',
+    'cognitive-planning': 'Cognitive Planning',
+    'llm-integration': 'LLM Integration',
+  };
+
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
-        <Link
-          href="/"
-          className="text-indigo-600 hover:text-indigo-800 mb-8 inline-block"
-        >
-          ← Back to Home
-        </Link>
+    <DocsLayout>
+      <div className="min-h-screen bg-white dark:bg-slate-900 transition-colors">
+        <div className="max-w-4xl mx-auto px-4 md:px-8 py-8 md:py-12">
 
-        <article className="prose prose-lg dark:prose-invert max-w-none">
-          <h1>Module 4: Vision-Language-Action (VLA)</h1>
-          
-          <section className="my-8">
-            <h2>Introduction</h2>
-            <p>
-              Vision-Language-Action (VLA) represents the convergence of Large Language 
-              Models (LLMs) and Robotics. This module teaches how to use natural language 
-              to control robots and enable conversational AI in robotic systems.
-            </p>
-          </section>
+        {/* Show introduction content from Docusaurus */}
+        {introContent && (
+          <div className="mb-8">
+            <MarkdownContent content={introContent} />
+          </div>
+        )}
 
-          <section className="my-8">
-            <h2>Voice-to-Action: OpenAI Whisper</h2>
-            <p>
-              OpenAI Whisper is a speech recognition model that converts spoken language 
-              into text. In robotics, this enables:
-            </p>
-            <ul>
-              <li>Voice commands for robot control</li>
-              <li>Natural language interaction</li>
-              <li>Multi-language support</li>
-              <li>Real-time speech transcription</li>
-            </ul>
-            <p>
-              Integration with ROS 2 allows voice commands to be processed and converted 
-              into robot actions.
-            </p>
-          </section>
+        {/* Table of Contents from Docusaurus */}
+        <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-200 dark:border-slate-700 p-6 mb-8">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Table of Contents</h2>
+          <ul className="space-y-1">
+            {sections.map((section) => (
+              <li key={section}>
+                <Link
+                  href={`/module4/${section}`}
+                  className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 flex items-center py-1.5 hover:underline transition-colors"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400 mr-3"></span>
+                  {sectionMap[section] || section}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-          <section className="my-8">
-            <h2>Cognitive Planning with LLMs</h2>
-            <p>
-              Large Language Models can translate high-level natural language commands 
-              (like &quot;Clean the room&quot;) into sequences of robot actions. This involves:
-            </p>
-            <ul>
-              <li><strong>Intent Understanding:</strong> Parsing user commands</li>
-              <li><strong>Task Decomposition:</strong> Breaking down complex tasks</li>
-              <li><strong>Action Planning:</strong> Generating ROS 2 action sequences</li>
-              <li><strong>Error Recovery:</strong> Handling failures and replanning</li>
-            </ul>
-          </section>
-
-          <section className="my-8">
-            <h2>VLA Integration Architecture</h2>
-            <p>
-              A typical VLA system consists of:
-            </p>
-            <ol>
-              <li><strong>Voice Input:</strong> Whisper transcribes speech to text</li>
-              <li><strong>LLM Processing:</strong> GPT models understand intent and plan actions</li>
-              <li><strong>Action Execution:</strong> ROS 2 nodes execute the planned actions</li>
-              <li><strong>Feedback Loop:</strong> Vision and sensor data inform the LLM about progress</li>
-            </ol>
-          </section>
-
-          <section className="my-8">
-            <h2>Multi-Modal Interaction</h2>
-            <p>
-              Modern VLA systems combine multiple modalities:
-            </p>
-            <ul>
-              <li><strong>Speech:</strong> Voice commands and responses</li>
-              <li><strong>Vision:</strong> Understanding visual context</li>
-              <li><strong>Gesture:</strong> Recognizing human gestures</li>
-              <li><strong>Text:</strong> Chat-based interaction</li>
-            </ul>
-          </section>
-        </article>
-
-        <div className="mt-12 flex gap-4">
-          <Link
-            href="/module3"
-            className="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors"
-          >
-            ← Previous
-          </Link>
+        {/* Quick Links */}
+        <div className="mt-12 pt-8 border-t border-gray-200 dark:border-slate-800 flex gap-4 justify-end">
           <Link
             href="/capstone"
-            className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+            className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium"
           >
             Next: Capstone →
           </Link>
         </div>
+        </div>
       </div>
-
       <Chatbot />
-    </div>
+    </DocsLayout>
   );
 }
-

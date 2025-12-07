@@ -1,104 +1,67 @@
 import Link from "next/link";
 import Chatbot from "@/components/Chatbot";
+import DocsLayout from '@/components/DocsLayout';
+import { getModuleFiles } from '@/lib/markdown-loader';
+import MarkdownContent from '@/components/MarkdownContent';
+import { loadMarkdownContent } from '@/lib/markdown-loader';
 
-export default function Module3Page() {
+export default async function Module3Page() {
+  // Get all sections from Docusaurus
+  const sections = await getModuleFiles('module3');
+  
+  // Load introduction content
+  const introContent = await loadMarkdownContent('module3/introduction.md');
+  
+  // Map section names to display names
+  const sectionMap: Record<string, string> = {
+    'introduction': 'Introduction',
+    'isaac-sim': 'NVIDIA Isaac Sim',
+    'isaac-ros': 'Isaac ROS',
+    'nav2': 'Nav2 Path Planning',
+  };
+
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
-        <Link
-          href="/"
-          className="text-indigo-600 hover:text-indigo-800 mb-8 inline-block"
-        >
-          ← Back to Home
-        </Link>
+    <DocsLayout>
+      <div className="min-h-screen bg-white dark:bg-slate-900 transition-colors">
+        <div className="max-w-4xl mx-auto px-4 md:px-8 py-8 md:py-12">
 
-        <article className="prose prose-lg dark:prose-invert max-w-none">
-          <h1>Module 3: The AI-Robot Brain (NVIDIA Isaac™)</h1>
-          
-          <section className="my-8">
-            <h2>Introduction</h2>
-            <p>
-              NVIDIA Isaac is a comprehensive platform for developing AI-powered robots. 
-              It provides tools for simulation, perception, manipulation, and reinforcement 
-              learning, all optimized for NVIDIA GPUs.
-            </p>
-          </section>
+        {/* Show introduction content from Docusaurus */}
+        {introContent && (
+          <div className="mb-8">
+            <MarkdownContent content={introContent} />
+          </div>
+        )}
 
-          <section className="my-8">
-            <h2>NVIDIA Isaac Sim</h2>
-            <p>
-              Isaac Sim is a photorealistic simulation environment built on NVIDIA Omniverse. 
-              It provides:
-            </p>
-            <ul>
-              <li>High-fidelity physics simulation</li>
-              <li>Realistic rendering with ray tracing</li>
-              <li>Synthetic data generation for training</li>
-              <li>Domain randomization for sim-to-real transfer</li>
-            </ul>
-          </section>
+        {/* Table of Contents from Docusaurus */}
+        <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-200 dark:border-slate-700 p-6 mb-8">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Table of Contents</h2>
+          <ul className="space-y-1">
+            {sections.map((section) => (
+              <li key={section}>
+                <Link
+                  href={`/module3/${section}`}
+                  className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 flex items-center py-1.5 hover:underline transition-colors"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400 mr-3"></span>
+                  {sectionMap[section] || section}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-          <section className="my-8">
-            <h2>Isaac ROS</h2>
-            <p>
-              Isaac ROS provides hardware-accelerated ROS 2 packages optimized for NVIDIA 
-              GPUs. Key capabilities include:
-            </p>
-            <ul>
-              <li><strong>VSLAM (Visual SLAM):</strong> Real-time localization and mapping</li>
-              <li><strong>Perception:</strong> Object detection and tracking</li>
-              <li><strong>Navigation:</strong> Path planning and obstacle avoidance</li>
-              <li><strong>Manipulation:</strong> Grasp planning and execution</li>
-            </ul>
-          </section>
-
-          <section className="my-8">
-            <h2>Nav2 for Bipedal Humanoid Movement</h2>
-            <p>
-              Nav2 is a navigation framework for ROS 2 that can be adapted for humanoid 
-              robots. Unlike wheeled robots, humanoids require:
-            </p>
-            <ul>
-              <li>Balance-aware path planning</li>
-              <li>Footstep planning</li>
-              <li>Dynamic stability considerations</li>
-              <li>Adaptation to uneven terrain</li>
-            </ul>
-          </section>
-
-          <section className="my-8">
-            <h2>Reinforcement Learning for Robot Control</h2>
-            <p>
-              Isaac Sim includes tools for training reinforcement learning agents to control 
-              robots. This enables:
-            </p>
-            <ul>
-              <li>Learning complex behaviors through trial and error</li>
-              <li>Sim-to-real transfer of learned policies</li>
-              <li>Adaptive control strategies</li>
-              <li>End-to-end learning from perception to action</li>
-            </ul>
-          </section>
-        </article>
-
-        <div className="mt-12 flex gap-4">
-          <Link
-            href="/module2"
-            className="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors"
-          >
-            ← Previous
-          </Link>
+        {/* Quick Links */}
+        <div className="mt-12 pt-8 border-t border-gray-200 dark:border-slate-800 flex gap-4 justify-end">
           <Link
             href="/module4"
-            className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+            className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium"
           >
             Next: Module 4 →
           </Link>
         </div>
+        </div>
       </div>
-
       <Chatbot />
-    </div>
+    </DocsLayout>
   );
 }
-

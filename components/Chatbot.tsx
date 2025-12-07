@@ -105,7 +105,7 @@ export default function Chatbot() {
     <>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 bg-indigo-600 text-white rounded-full w-16 h-16 shadow-lg hover:bg-indigo-700 transition-colors flex items-center justify-center z-50"
+        className="fixed bottom-4 right-4 md:bottom-6 md:right-6 bg-indigo-600 text-white rounded-full w-14 h-14 md:w-16 md:h-16 shadow-lg hover:bg-indigo-700 transition-colors flex items-center justify-center z-50"
         aria-label="Toggle chatbot"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,7 +114,7 @@ export default function Chatbot() {
       </button>
 
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-96 h-[600px] bg-white dark:bg-gray-800 rounded-lg shadow-2xl flex flex-col z-50 border border-gray-200 dark:border-gray-700">
+        <div className="fixed bottom-20 right-4 w-[calc(100vw-2rem)] md:w-96 h-[500px] md:h-[600px] bg-white dark:bg-gray-800 rounded-lg shadow-2xl flex flex-col z-50 border border-gray-200 dark:border-gray-700 md:right-6 md:bottom-24">
           <div className="bg-indigo-600 text-white p-4 rounded-t-lg flex justify-between items-center">
             <h3 className="font-semibold">AI Assistant</h3>
             <button

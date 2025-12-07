@@ -1,128 +1,68 @@
 import Link from "next/link";
 import Chatbot from "@/components/Chatbot";
+import DocsLayout from '@/components/DocsLayout';
+import { getModuleFiles } from '@/lib/markdown-loader';
+import MarkdownContent from '@/components/MarkdownContent';
+import { loadMarkdownContent } from '@/lib/markdown-loader';
 
-export default function Module1Page() {
+export default async function Module1Page() {
+  // Get all sections from Docusaurus
+  const sections = await getModuleFiles('module1');
+  
+  // Load introduction content
+  const introContent = await loadMarkdownContent('module1/introduction.md');
+  
+  // Map section names to display names
+  const sectionMap: Record<string, string> = {
+    'introduction': 'Introduction',
+    'architecture': 'ROS 2 Architecture',
+    'nodes-topics-services': 'Nodes, Topics, and Services',
+    'urdf': 'Understanding URDF',
+    'python-agents': 'Bridging Python Agents to ROS 2',
+  };
+
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
-        <Link
-          href="/"
-          className="text-indigo-600 hover:text-indigo-800 mb-8 inline-block"
-        >
-          ← Back to Home
-        </Link>
+    <DocsLayout>
+      <div className="min-h-screen bg-white dark:bg-slate-900 transition-colors">
+        <div className="max-w-4xl mx-auto px-4 md:px-8 py-8 md:py-12">
 
-        <article className="prose prose-lg dark:prose-invert max-w-none">
-          <h1>Module 1: The Robotic Nervous System (ROS 2)</h1>
-          
-          <section className="my-8">
-            <h2>Introduction</h2>
-            <p>
-              ROS 2 (Robot Operating System 2) is the middleware that enables communication 
-              between different components of a robot system. Think of it as the nervous system 
-              that allows the robot&apos;s &quot;brain&quot; (AI algorithms) to communicate with its &quot;body&quot; 
-              (sensors and actuators).
-            </p>
-          </section>
+        {/* Show introduction content from Docusaurus */}
+        {introContent && (
+          <div className="mb-8">
+            <MarkdownContent content={introContent} />
+          </div>
+        )}
 
-          <section className="my-8">
-            <h2>ROS 2 Architecture</h2>
-            <p>
-              ROS 2 follows a distributed architecture where different processes (nodes) 
-              communicate through topics, services, and actions. This design allows for 
-              modularity and scalability.
-            </p>
-            <h3>Core Concepts</h3>
-            <ul>
-              <li><strong>Nodes:</strong> Individual processes that perform specific tasks</li>
-              <li><strong>Topics:</strong> Asynchronous communication channels for streaming data</li>
-              <li><strong>Services:</strong> Synchronous request-response communication</li>
-              <li><strong>Actions:</strong> Long-running tasks with feedback</li>
-            </ul>
-          </section>
+        {/* Table of Contents from Docusaurus */}
+        <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-200 dark:border-slate-700 p-6 mb-8">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Table of Contents</h2>
+          <ul className="space-y-1">
+            {sections.map((section) => (
+              <li key={section}>
+                <Link
+                  href={`/module1/${section}`}
+                  className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 flex items-center py-1.5 hover:underline transition-colors"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400 mr-3"></span>
+                  {sectionMap[section] || section}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-          <section className="my-8">
-            <h2>ROS 2 Nodes, Topics, and Services</h2>
-            <p>
-              Nodes are the fundamental building blocks of ROS 2. Each node is responsible 
-              for a specific function, such as reading sensor data, processing images, or 
-              controlling motors.
-            </p>
-            <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded">
-{`# Example: Creating a ROS 2 Node in Python
-import rclpy
-from rclpy.node import Node
-
-class MyNode(Node):
-    def __init__(self):
-        super().__init__('my_node')
-        self.publisher = self.create_publisher(
-            String, 'topic_name', 10
-        )
-        self.subscription = self.create_subscription(
-            String, 'input_topic', self.callback, 10
-        )
-    
-    def callback(self, msg):
-        self.get_logger().info(f'Received: {msg.data}')
-
-def main():
-    rclpy.init()
-    node = MyNode()
-    rclpy.spin(node)
-    rclpy.shutdown()
-
-if __name__ == '__main__':
-    main()`}
-            </pre>
-          </section>
-
-          <section className="my-8">
-            <h2>Bridging Python Agents to ROS Controllers</h2>
-            <p>
-              Modern AI agents written in Python can be integrated with ROS 2 using the 
-              rclpy library. This allows you to leverage AI models (like GPT, vision models, 
-              etc.) to control robots.
-            </p>
-            <p>
-              The key is to create ROS 2 nodes that wrap your AI agent logic, allowing the 
-              agent to subscribe to sensor data and publish control commands.
-            </p>
-          </section>
-
-          <section className="my-8">
-            <h2>Understanding URDF for Humanoids</h2>
-            <p>
-              URDF (Unified Robot Description Format) is an XML format used to describe the 
-              physical structure of a robot, including its links (parts), joints, and their 
-              relationships.
-            </p>
-            <p>
-              For humanoid robots, URDF files define the kinematic chain from the base 
-              (pelvis) through the legs, torso, arms, and head. This description is essential 
-              for simulation, motion planning, and control.
-            </p>
-          </section>
-        </article>
-
-        <div className="mt-12 flex gap-4">
-          <Link
-            href="/intro"
-            className="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors"
-          >
-            ← Previous
-          </Link>
+        {/* Quick Links */}
+        <div className="mt-12 pt-8 border-t border-gray-200 dark:border-slate-800 flex gap-4 justify-end">
           <Link
             href="/module2"
-            className="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+            className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium"
           >
             Next: Module 2 →
           </Link>
         </div>
+        </div>
       </div>
-
       <Chatbot />
-    </div>
+    </DocsLayout>
   );
 }
-

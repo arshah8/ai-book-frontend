@@ -14,7 +14,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 transition-colors">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-4">
@@ -65,35 +65,6 @@ export default function Home() {
         </div>
 
         <div className="text-center space-y-4">
-          {user ? (
-            <div className="mb-4">
-              <p className="text-gray-600 dark:text-gray-300 mb-2">
-                Welcome, {user.name || user.email}!
-              </p>
-              <button
-                onClick={signOut}
-                className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-              >
-                Sign Out
-              </button>
-            </div>
-          ) : (
-            <div className="mb-4 space-x-4">
-              <Link
-                href="/signin"
-                className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400"
-              >
-                Sign In
-              </Link>
-              <span className="text-gray-400">|</span>
-              <Link
-                href="/signup"
-                className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400"
-              >
-                Sign Up
-              </Link>
-            </div>
-          )}
           <Link
             href="/intro"
             className="inline-block bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition-colors"
@@ -125,7 +96,7 @@ function ModuleCard({
       className="block bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow"
     >
       <div className="flex items-center mb-4">
-        <div className="bg-indigo-600 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold mr-3">
+        <div className="w-10 h-10 mr-3 rounded-full flex items-center justify-center font-bold bg-white text-indigo-700 border border-indigo-200 shadow-sm dark:bg-indigo-600 dark:text-white dark:border-indigo-500">
           {number}
         </div>
         <div>

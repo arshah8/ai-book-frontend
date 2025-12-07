@@ -1,0 +1,78 @@
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import Chatbot from '@/components/Chatbot';
+import DocsLayout from '@/components/DocsLayout';
+import MarkdownContent from '@/components/MarkdownContent';
+import { loadMarkdownContent, getModuleFiles } from '@/lib/markdown-loader';
+
+interface PageProps {
+  params: Promise<{
+    section: string;
+  }>;
+}
+
+export async function generateStaticParams() {
+  const sections = await getModuleFiles('module4');
+  return sections.map((section) => ({
+    section,
+  }));
+}
+
+export default async function Module4SectionPage({ params }: PageProps) {
+  const { section } = await params;
+  
+  // Load markdown content from Docusaurus
+  const content = await loadMarkdownContent(`module4/${section}.md`);
+  
+  if (!content) {
+    notFound();
+  }
+  
+  // Get all sections for navigation
+  const allSections = await getModuleFiles('module4');
+  const currentIndex = allSections.indexOf(section);
+  const prevSection = currentIndex > 0 ? allSections[currentIndex - 1] : null;
+  const nextSection = currentIndex < allSections.length - 1 ? allSections[currentIndex + 1] : null;
+  
+  return (
+    <DocsLayout>
+      <div className="min-h-screen bg-white dark:bg-slate-900 transition-colors">
+        <div className="max-w-4xl mx-auto px-4 md:px-8 py-8 md:py-12">
+          <MarkdownContent content={content} />
+
+          <div className="mt-12 pt-8 border-t border-gray-200 dark:border-slate-800 flex gap-4 justify-between">
+            <div>
+              {prevSection && (
+                <Link
+                  href={`/module4/${prevSection}`}
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium"
+                >
+                  ← Previous
+                </Link>
+              )}
+            </div>
+            <div>
+              {nextSection ? (
+                <Link
+                  href={`/module4/${nextSection}`}
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium"
+                >
+                  Next →
+                </Link>
+              ) : (
+                <Link
+                  href="/capstone"
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium"
+                >
+                  Next: Capstone →
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      <Chatbot />
+    </DocsLayout>
+  );
+}
+

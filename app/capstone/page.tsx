@@ -1,124 +1,55 @@
 import Link from "next/link";
 import Chatbot from "@/components/Chatbot";
+import DocsLayout from '@/components/DocsLayout';
+import { getModuleFiles } from '@/lib/markdown-loader';
+import MarkdownContent from '@/components/MarkdownContent';
+import { loadMarkdownContent } from '@/lib/markdown-loader';
 
-export default function CapstonePage() {
+export default async function CapstonePage() {
+  // Get all sections from Docusaurus
+  const sections = await getModuleFiles('capstone');
+  
+  // Load overview content
+  const overviewContent = await loadMarkdownContent('capstone/overview.md');
+  
+  // Map section names to display names
+  const sectionMap: Record<string, string> = {
+    'overview': 'Project Overview',
+    'implementation': 'Implementation',
+    'deployment': 'Deployment',
+  };
+
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
-        <Link
-          href="/"
-          className="text-indigo-600 hover:text-indigo-800 mb-8 inline-block"
-        >
-          ← Back to Home
-        </Link>
+    <DocsLayout>
+      <div className="min-h-screen bg-white dark:bg-slate-900 transition-colors">
+        <div className="max-w-4xl mx-auto px-4 md:px-8 py-8 md:py-12">
+          {/* Show overview content from Docusaurus */}
+          {overviewContent && (
+            <div className="mb-8">
+              <MarkdownContent content={overviewContent} />
+            </div>
+          )}
 
-        <article className="prose prose-lg dark:prose-invert max-w-none">
-          <h1>Capstone Project: The Autonomous Humanoid</h1>
-          
-          <section className="my-8">
-            <h2>Project Overview</h2>
-            <p>
-              The capstone project brings together all the concepts learned throughout the 
-              course. You will build a simulated humanoid robot that:
-            </p>
-            <ul>
-              <li>Receives voice commands</li>
-              <li>Plans a path to complete the task</li>
-              <li>Navigates obstacles in the environment</li>
-              <li>Identifies objects using computer vision</li>
-              <li>Manipulates objects to complete the task</li>
+          {/* Table of Contents from Docusaurus */}
+          <div className="bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-200 dark:border-slate-700 p-6 mb-8">
+            <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Table of Contents</h2>
+            <ul className="space-y-1">
+              {sections.map((section) => (
+                <li key={section}>
+                  <Link
+                    href={`/capstone/${section}`}
+                    className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 flex items-center py-1.5 hover:underline transition-colors"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400 mr-3"></span>
+                    {sectionMap[section] || section}
+                  </Link>
+                </li>
+              ))}
             </ul>
-          </section>
-
-          <section className="my-8">
-            <h2>System Architecture</h2>
-            <p>
-              Your autonomous humanoid system should integrate:
-            </p>
-            <ol>
-              <li><strong>Voice Interface:</strong> Whisper for speech recognition</li>
-              <li><strong>Planning Module:</strong> LLM-based task planning</li>
-              <li><strong>Navigation Stack:</strong> Nav2 for path planning</li>
-              <li><strong>Perception Pipeline:</strong> Object detection and recognition</li>
-              <li><strong>Manipulation Controller:</strong> Grasp planning and execution</li>
-            </ol>
-          </section>
-
-          <section className="my-8">
-            <h2>Implementation Steps</h2>
-            <h3>Phase 1: Setup and Simulation</h3>
-            <ul>
-              <li>Set up Gazebo/Isaac Sim environment</li>
-              <li>Load humanoid robot model (URDF)</li>
-              <li>Configure sensors (cameras, LiDAR, IMU)</li>
-              <li>Test basic locomotion</li>
-            </ul>
-
-            <h3>Phase 2: Voice and Planning</h3>
-            <ul>
-              <li>Integrate Whisper for voice input</li>
-              <li>Connect LLM for task planning</li>
-              <li>Implement action sequence generation</li>
-            </ul>
-
-            <h3>Phase 3: Navigation</h3>
-            <ul>
-              <li>Configure Nav2 for humanoid navigation</li>
-              <li>Implement obstacle avoidance</li>
-              <li>Test path planning in various scenarios</li>
-            </ul>
-
-            <h3>Phase 4: Perception and Manipulation</h3>
-            <ul>
-              <li>Implement object detection pipeline</li>
-              <li>Develop grasp planning algorithms</li>
-              <li>Integrate manipulation controllers</li>
-            </ul>
-
-            <h3>Phase 5: Integration and Testing</h3>
-            <ul>
-              <li>End-to-end system integration</li>
-              <li>Test complete task execution</li>
-              <li>Optimize performance and reliability</li>
-            </ul>
-          </section>
-
-          <section className="my-8">
-            <h2>Evaluation Criteria</h2>
-            <ul>
-              <li>Successful voice command recognition</li>
-              <li>Accurate task planning and decomposition</li>
-              <li>Reliable navigation and obstacle avoidance</li>
-              <li>Correct object identification</li>
-              <li>Successful object manipulation</li>
-              <li>System robustness and error handling</li>
-            </ul>
-          </section>
-
-          <section className="my-8">
-            <h2>Deliverables</h2>
-            <ul>
-              <li>Complete ROS 2 package with all nodes</li>
-              <li>Simulation environment configuration</li>
-              <li>Documentation of system architecture</li>
-              <li>Demo video showing full task execution</li>
-              <li>Code repository with clear README</li>
-            </ul>
-          </section>
-        </article>
-
-        <div className="mt-12">
-          <Link
-            href="/module4"
-            className="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors"
-          >
-            ← Previous
-          </Link>
+          </div>
         </div>
       </div>
-
       <Chatbot />
-    </div>
+    </DocsLayout>
   );
 }
-

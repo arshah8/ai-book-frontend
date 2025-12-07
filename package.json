@@ -12,16 +12,21 @@
     "frontend": "next dev"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^0.9.0",
+    "@qdrant/qdrant-js": "^1.9.0",
+    "better-auth": "^1.0.0",
+    "drizzle-kit": "^0.20.0",
+    "drizzle-orm": "^0.29.0",
     "next": "^15.0.0",
+    "next-themes": "^0.4.6",
+    "openai": "^4.47.0",
+    "postgres": "^3.4.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "openai": "^4.47.0",
-    "better-auth": "^1.0.0",
-    "@qdrant/qdrant-js": "^1.9.0",
-    "@neondatabase/serverless": "^0.9.0",
-    "drizzle-orm": "^0.29.0",
-    "postgres": "^3.4.0",
-    "drizzle-kit": "^0.20.0",
+    "react-markdown": "^10.1.0",
+    "rehype-highlight": "^7.0.2",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
@@ -29,11 +34,11 @@
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
     "@types/uuid": "^9.0.0",
-    "typescript": "^5.0.0",
-    "tailwindcss": "^3.4.0",
-    "postcss": "^8.4.0",
     "autoprefixer": "^10.4.0",
     "eslint": "^8.57.0",
-    "eslint-config-next": "^15.0.0"
+    "eslint-config-next": "^15.0.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.0.0"
   }
 }
