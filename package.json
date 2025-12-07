@@ -1,0 +1,39 @@
+{
+  "name": "physical-ai-textbook",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "dev:all": "./run-dev.sh",
+    "backend": "cd backend && source venv/bin/activate && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000",
+    "frontend": "next dev"
+  },
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "openai": "^4.47.0",
+    "better-auth": "^1.0.0",
+    "@qdrant/qdrant-js": "^1.9.0",
+    "@neondatabase/serverless": "^0.9.0",
+    "drizzle-orm": "^0.29.0",
+    "postgres": "^3.4.0",
+    "drizzle-kit": "^0.20.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@types/uuid": "^9.0.0",
+    "typescript": "^5.0.0",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^15.0.0"
+  }
+}
