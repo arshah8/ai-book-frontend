@@ -20,7 +20,7 @@ export default function Module1Page() {
             <p>
               ROS 2 (Robot Operating System 2) is the middleware that enables communication 
               between different components of a robot system. Think of it as the nervous system 
-              that allows the robot's "brain" (AI algorithms) to communicate with its "body" 
+              that allows the robot&apos;s &quot;brain&quot; (AI algorithms) to communicate with its &quot;body&quot; 
               (sensors and actuators).
             </p>
           </section>

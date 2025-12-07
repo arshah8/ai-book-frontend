@@ -46,7 +46,7 @@ export default function Module4Page() {
             <h2>Cognitive Planning with LLMs</h2>
             <p>
               Large Language Models can translate high-level natural language commands 
-              (like "Clean the room") into sequences of robot actions. This involves:
+              (like &quot;Clean the room&quot;) into sequences of robot actions. This involves:
             </p>
             <ul>
               <li><strong>Intent Understanding:</strong> Parsing user commands</li>
